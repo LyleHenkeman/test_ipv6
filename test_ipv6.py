@@ -17,7 +17,6 @@ if opt_out_of_certificate_verification:
 print "ipv6testhost is", ipv6testhost
 
 hostipv6info = socket.getaddrinfo(ipv6testhost, 80, socket.AF_INET6, 0, socket.IPPROTO_TCP)
-
 for item in hostipv6info:
 	print "Loop:"
 
@@ -59,7 +58,6 @@ for item in hostipv6info:
 		print "No IPv6 connection via HTTPS", url
 
 hostipv6info = socket.getaddrinfo(ipv6testhost, 443, socket.AF_INET6, 0, socket.IPPROTO_TCP)
-
 for item in hostipv6info:
 
 	try:
