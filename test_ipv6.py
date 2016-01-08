@@ -16,7 +16,7 @@ if opt_out_of_certificate_verification:
 
 print "ipv6testhost is", ipv6testhost
 
-hostipv6info = socket.getaddrinfo(ipv6testhost, 443, socket.AF_INET6, 0, socket.IPPROTO_TCP)
+hostipv6info = socket.getaddrinfo(ipv6testhost, 0, socket.AF_INET6, 0, socket.IPPROTO_TCP)
 
 for item in hostipv6info:
 
