@@ -1,4 +1,4 @@
-ipv6testhost = "www.google.com"
+ipv6testhost = "ipv6.google.com"
 
 import socket
 import urllib
@@ -16,7 +16,49 @@ if opt_out_of_certificate_verification:
 
 print "ipv6testhost is", ipv6testhost
 
-hostipv6info = socket.getaddrinfo(ipv6testhost, 0, socket.AF_INET6, 0, socket.IPPROTO_TCP)
+hostipv6info = socket.getaddrinfo(ipv6testhost, 80, socket.AF_INET6, 0, socket.IPPROTO_TCP)
+
+for item in hostipv6info:
+	print "Loop:"
+
+	try:
+		af, socktype, proto, canonname, sa = item
+		print "canonname", sa
+		sock = socket.socket(af, socktype, proto)
+		sock.settimeout(2)  # 2 second timeout
+		sock.connect(sa[0:2])
+		sock.close()
+		print('socket connect: IPv6 test successful.')
+
+	except socket.error:
+		print('socket connect: Cannot reach IPv6 test host.')
+
+	except:
+		print('socket connect: Problem during IPv6 connect. Reason: %s', sys.exc_info()[0])
+
+
+	ipv6address = item[4][0]
+
+	url = "http://[" + ipv6address + "]/"
+	#print "url is", url
+	try:
+		f = urllib.urlopen(url)
+		print "Yes, IPv6 connection via HTTP", url
+		f.read()
+	except:
+		print "No IPv6 connection via HTTP", url
+
+
+	url = "https://[" + ipv6address + "]/"
+	#print "url is", url
+	try:
+		f = urllib.urlopen(url)
+		print "Yes, IPv6 connection via HTTPS", url
+		f.read()
+	except:
+		print "No IPv6 connection via HTTPS", url
+
+hostipv6info = socket.getaddrinfo(ipv6testhost, 443, socket.AF_INET6, 0, socket.IPPROTO_TCP)
 
 for item in hostipv6info:
 
@@ -27,13 +69,13 @@ for item in hostipv6info:
 		sock.settimeout(2)  # 2 second timeout
 		sock.connect(sa[0:2])
 		sock.close()
-		print('socket connect: IPv6 test successful. Enabling IPv6')
+		print('socket connect: IPv6 test successful.')
 
 	except socket.error:
-		print('socket connect: Cannot reach IPv6 test host. Disabling IPv6')
+		print('socket connect: Cannot reach IPv6 test host.')
 
 	except:
-		print('socket connect: Problem during IPv6 connect. Disabling IPv6. Reason: %s', sys.exc_info()[0])
+		print('socket connect: Problem during IPv6 connect. Reason: %s', sys.exc_info()[0])
 
 
 	ipv6address = item[4][0]
@@ -58,4 +100,3 @@ for item in hostipv6info:
 		print "No IPv6 connection via HTTPS", url
 
 print "Done"
-
